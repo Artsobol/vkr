@@ -1,0 +1,201 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_06_to_be" targetNamespace="https://example.org/lab3/bpmn">
+  <process id="Process_06_to_be" name="TO-BE - Обучение с персонализацией и контролем пререквизитов" isExecutable="false">
+    <laneSet id="LaneSet_06_to_be">
+      <lane id="Lane_learner" name="Учащийся">
+        <flowNodeRef>Node_start</flowNodeRef>
+        <flowNodeRef>Node_study</flowNodeRef>
+        <flowNodeRef>Node_submit</flowNodeRef>
+        <flowNodeRef>Node_next</flowNodeRef>
+        <flowNodeRef>Node_end</flowNodeRef>
+      </lane>
+      <lane id="Lane_platform" name="Образовательная платформа">
+        <flowNodeRef>Node_check</flowNodeRef>
+        <flowNodeRef>Node_save</flowNodeRef>
+        <flowNodeRef>Node_filter</flowNodeRef>
+        <flowNodeRef>Node_choose</flowNodeRef>
+        <flowNodeRef>Node_ml</flowNodeRef>
+        <flowNodeRef>Node_fallback</flowNodeRef>
+        <flowNodeRef>Node_explain</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="Node_start" name="Начало">
+      <outgoing>Flow_0</outgoing>
+    </startEvent>
+    <userTask id="Node_study" name="Изучить материал">
+      <incoming>Flow_0</incoming>
+      <outgoing>Flow_1</outgoing>
+    </userTask>
+    <userTask id="Node_submit" name="Отправить ответ">
+      <incoming>Flow_1</incoming>
+      <outgoing>Flow_8</outgoing>
+    </userTask>
+    <serviceTask id="Node_check" name="Проверить ответ автоматически">
+      <incoming>Flow_8</incoming>
+      <outgoing>Flow_2</outgoing>
+    </serviceTask>
+    <serviceTask id="Node_save" name="Сохранить попытку и обновить профиль">
+      <incoming>Flow_2</incoming>
+      <outgoing>Flow_3</outgoing>
+    </serviceTask>
+    <serviceTask id="Node_filter" name="Исключить темы с неосвоенными пререквизитами">
+      <incoming>Flow_3</incoming>
+      <outgoing>Flow_4</outgoing>
+    </serviceTask>
+    <exclusiveGateway id="Node_choose" name="Есть история?">
+      <incoming>Flow_4</incoming>
+      <outgoing>Flow_5</outgoing>
+      <outgoing>Flow_9</outgoing>
+    </exclusiveGateway>
+    <serviceTask id="Node_ml" name="ML: персонализированный рейтинг">
+      <incoming>Flow_5</incoming>
+      <outgoing>Flow_6</outgoing>
+    </serviceTask>
+    <serviceTask id="Node_fallback" name="Базовый подбор / резерв">
+      <incoming>Flow_9</incoming>
+      <incoming>Flow_10</incoming>
+      <outgoing>Flow_11</outgoing>
+    </serviceTask>
+    <boundaryEvent id="Node_fail" name="Таймаут" attachedToRef="Node_ml" cancelActivity="true">
+      <timerEventDefinition id="timer_fail">
+        <timeDuration xsi:type="tFormalExpression">PT4S</timeDuration>
+      </timerEventDefinition>
+      <outgoing>Flow_10</outgoing>
+    </boundaryEvent>
+    <serviceTask id="Node_explain" name="Сформировать причины рекомендаций">
+      <incoming>Flow_6</incoming>
+      <incoming>Flow_11</incoming>
+      <outgoing>Flow_12</outgoing>
+    </serviceTask>
+    <userTask id="Node_next" name="Получить следующий материал">
+      <incoming>Flow_12</incoming>
+      <outgoing>Flow_7</outgoing>
+    </userTask>
+    <endEvent id="Node_end" name="Конец">
+      <incoming>Flow_7</incoming>
+    </endEvent>
+    <sequenceFlow id="Flow_0" sourceRef="Node_start" targetRef="Node_study"/>
+    <sequenceFlow id="Flow_1" sourceRef="Node_study" targetRef="Node_submit"/>
+    <sequenceFlow id="Flow_2" sourceRef="Node_check" targetRef="Node_save"/>
+    <sequenceFlow id="Flow_3" sourceRef="Node_save" targetRef="Node_filter"/>
+    <sequenceFlow id="Flow_4" sourceRef="Node_filter" targetRef="Node_choose"/>
+    <sequenceFlow id="Flow_5" sourceRef="Node_choose" targetRef="Node_ml" name="Да"/>
+    <sequenceFlow id="Flow_6" sourceRef="Node_ml" targetRef="Node_explain"/>
+    <sequenceFlow id="Flow_7" sourceRef="Node_next" targetRef="Node_end"/>
+    <sequenceFlow id="Flow_8" sourceRef="Node_submit" targetRef="Node_check"/>
+    <sequenceFlow id="Flow_9" sourceRef="Node_choose" targetRef="Node_fallback" name="Нет">
+      <conditionExpression xsi:type="tFormalExpression">history_sufficient = false</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_10" sourceRef="Node_fail" targetRef="Node_fallback"/>
+    <sequenceFlow id="Flow_11" sourceRef="Node_fallback" targetRef="Node_explain"/>
+    <sequenceFlow id="Flow_12" sourceRef="Node_explain" targetRef="Node_next"/>
+  </process>
+  <bpmndi:BPMNDiagram id="Diagram_06-to-be">
+    <bpmndi:BPMNPlane id="Plane_06-to-be" bpmnElement="Process_06_to_be">
+      <bpmndi:BPMNShape id="Shape_Lane_learner" bpmnElement="Lane_learner" isHorizontal="true">
+        <dc:Bounds x="24" y="75" width="2472" height="115"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_platform" bpmnElement="Lane_platform" isHorizontal="true">
+        <dc:Bounds x="24" y="190" width="2472" height="350"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_start" bpmnElement="Node_start">
+        <dc:Bounds x="95" y="113" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_study" bpmnElement="Node_study">
+        <dc:Bounds x="180" y="100" width="175" height="62"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_submit" bpmnElement="Node_submit">
+        <dc:Bounds x="400" y="100" width="170" height="62"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_check" bpmnElement="Node_check">
+        <dc:Bounds x="625" y="285" width="200" height="66"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_save" bpmnElement="Node_save">
+        <dc:Bounds x="860" y="285" width="230" height="66"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_filter" bpmnElement="Node_filter">
+        <dc:Bounds x="1130" y="285" width="240" height="66"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_choose" bpmnElement="Node_choose">
+        <dc:Bounds x="1410" y="288" width="62" height="62"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_ml" bpmnElement="Node_ml">
+        <dc:Bounds x="1525" y="285" width="240" height="66"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_fallback" bpmnElement="Node_fallback">
+        <dc:Bounds x="1530" y="438" width="230" height="66"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_fail" bpmnElement="Node_fail">
+        <dc:Bounds x="1683" y="336" width="32" height="32"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_explain" bpmnElement="Node_explain">
+        <dc:Bounds x="1835" y="285" width="235" height="66"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_next" bpmnElement="Node_next">
+        <dc:Bounds x="2115" y="100" width="230" height="62"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_end" bpmnElement="Node_end">
+        <dc:Bounds x="2410" y="113" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_0" bpmnElement="Flow_0">
+        <di:waypoint x="131" y="131.0"/>
+        <di:waypoint x="180" y="131.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_1" bpmnElement="Flow_1">
+        <di:waypoint x="355" y="131.0"/>
+        <di:waypoint x="400" y="131.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_2" bpmnElement="Flow_2">
+        <di:waypoint x="825" y="318.0"/>
+        <di:waypoint x="860" y="318.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_3" bpmnElement="Flow_3">
+        <di:waypoint x="1090" y="318.0"/>
+        <di:waypoint x="1130" y="318.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_4" bpmnElement="Flow_4">
+        <di:waypoint x="1370" y="318.0"/>
+        <di:waypoint x="1410" y="319.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_5" bpmnElement="Flow_5">
+        <di:waypoint x="1472" y="319.0"/>
+        <di:waypoint x="1525" y="318.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_6" bpmnElement="Flow_6">
+        <di:waypoint x="1765" y="318.0"/>
+        <di:waypoint x="1835" y="318.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_7" bpmnElement="Flow_7">
+        <di:waypoint x="2345" y="131.0"/>
+        <di:waypoint x="2410" y="131.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_8" bpmnElement="Flow_8">
+        <di:waypoint x="570" y="131"/>
+        <di:waypoint x="597" y="131"/>
+        <di:waypoint x="597" y="318"/>
+        <di:waypoint x="625" y="318"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_9" bpmnElement="Flow_9">
+        <di:waypoint x="1441" y="350"/>
+        <di:waypoint x="1441" y="471"/>
+        <di:waypoint x="1530" y="471"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_10" bpmnElement="Flow_10">
+        <di:waypoint x="1699" y="368"/>
+        <di:waypoint x="1699" y="438"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_11" bpmnElement="Flow_11">
+        <di:waypoint x="1760" y="471"/>
+        <di:waypoint x="1795" y="471"/>
+        <di:waypoint x="1795" y="318"/>
+        <di:waypoint x="1835" y="318"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_12" bpmnElement="Flow_12">
+        <di:waypoint x="2070" y="318"/>
+        <di:waypoint x="2090" y="318"/>
+        <di:waypoint x="2090" y="131"/>
+        <di:waypoint x="2115" y="131"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

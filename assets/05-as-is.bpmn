@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_05_as_is" targetNamespace="https://example.org/lab3/bpmn">
+  <process id="Process_05_as_is" name="AS-IS - Типовой процесс обучения без персонализированной платформы" isExecutable="false">
+    <laneSet id="LaneSet_05_as_is">
+      <lane id="Lane_learner" name="Учащийся">
+        <flowNodeRef>Node_start</flowNodeRef>
+        <flowNodeRef>Node_choose</flowNodeRef>
+        <flowNodeRef>Node_static</flowNodeRef>
+        <flowNodeRef>Node_perform</flowNodeRef>
+        <flowNodeRef>Node_continue</flowNodeRef>
+        <flowNodeRef>Node_end</flowNodeRef>
+      </lane>
+      <lane id="Lane_platform" name="Преподаватель / обычная LMS">
+        <flowNodeRef>Node_review</flowNodeRef>
+        <flowNodeRef>Node_pick</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="Node_start" name="Начало">
+      <outgoing>Flow_0</outgoing>
+    </startEvent>
+    <userTask id="Node_choose" name="Выбрать курс">
+      <incoming>Flow_0</incoming>
+      <outgoing>Flow_1</outgoing>
+    </userTask>
+    <userTask id="Node_static" name="Изучать материалы в фиксированном порядке">
+      <incoming>Flow_1</incoming>
+      <outgoing>Flow_2</outgoing>
+    </userTask>
+    <userTask id="Node_perform" name="Выполнить задание">
+      <incoming>Flow_2</incoming>
+      <outgoing>Flow_5</outgoing>
+    </userTask>
+    <userTask id="Node_review" name="Проверить ответы и прогресс вручную">
+      <incoming>Flow_5</incoming>
+      <outgoing>Flow_3</outgoing>
+    </userTask>
+    <userTask id="Node_pick" name="Назначить следующий материал вручную">
+      <incoming>Flow_3</incoming>
+      <outgoing>Flow_6</outgoing>
+    </userTask>
+    <userTask id="Node_continue" name="Продолжить по общей программе">
+      <incoming>Flow_6</incoming>
+      <outgoing>Flow_4</outgoing>
+    </userTask>
+    <endEvent id="Node_end" name="Конец">
+      <incoming>Flow_4</incoming>
+    </endEvent>
+    <sequenceFlow id="Flow_0" sourceRef="Node_start" targetRef="Node_choose"/>
+    <sequenceFlow id="Flow_1" sourceRef="Node_choose" targetRef="Node_static"/>
+    <sequenceFlow id="Flow_2" sourceRef="Node_static" targetRef="Node_perform"/>
+    <sequenceFlow id="Flow_3" sourceRef="Node_review" targetRef="Node_pick"/>
+    <sequenceFlow id="Flow_4" sourceRef="Node_continue" targetRef="Node_end"/>
+    <sequenceFlow id="Flow_5" sourceRef="Node_perform" targetRef="Node_review"/>
+    <sequenceFlow id="Flow_6" sourceRef="Node_pick" targetRef="Node_continue"/>
+  </process>
+  <bpmndi:BPMNDiagram id="Diagram_05-as-is">
+    <bpmndi:BPMNPlane id="Plane_05-as-is" bpmnElement="Process_05_as_is">
+      <bpmndi:BPMNShape id="Shape_Lane_learner" bpmnElement="Lane_learner" isHorizontal="true">
+        <dc:Bounds x="24" y="75" width="1772" height="115"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_platform" bpmnElement="Lane_platform" isHorizontal="true">
+        <dc:Bounds x="24" y="190" width="1772" height="305"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_start" bpmnElement="Node_start">
+        <dc:Bounds x="105" y="113" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_choose" bpmnElement="Node_choose">
+        <dc:Bounds x="185" y="100" width="165" height="62"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_static" bpmnElement="Node_static">
+        <dc:Bounds x="430" y="100" width="225" height="62"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_perform" bpmnElement="Node_perform">
+        <dc:Bounds x="735" y="100" width="195" height="62"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_review" bpmnElement="Node_review">
+        <dc:Bounds x="950" y="300" width="245" height="66"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_pick" bpmnElement="Node_pick">
+        <dc:Bounds x="1235" y="300" width="245" height="66"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_continue" bpmnElement="Node_continue">
+        <dc:Bounds x="1510" y="100" width="210" height="62"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_end" bpmnElement="Node_end">
+        <dc:Bounds x="1760" y="113" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_0" bpmnElement="Flow_0">
+        <di:waypoint x="141" y="131.0"/>
+        <di:waypoint x="185" y="131.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_1" bpmnElement="Flow_1">
+        <di:waypoint x="350" y="131.0"/>
+        <di:waypoint x="430" y="131.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_2" bpmnElement="Flow_2">
+        <di:waypoint x="655" y="131.0"/>
+        <di:waypoint x="735" y="131.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_3" bpmnElement="Flow_3">
+        <di:waypoint x="1195" y="333.0"/>
+        <di:waypoint x="1235" y="333.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_4" bpmnElement="Flow_4">
+        <di:waypoint x="1720" y="131.0"/>
+        <di:waypoint x="1760" y="131.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_5" bpmnElement="Flow_5">
+        <di:waypoint x="930" y="131"/>
+        <di:waypoint x="938" y="131"/>
+        <di:waypoint x="938" y="333"/>
+        <di:waypoint x="950" y="333"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_6" bpmnElement="Flow_6">
+        <di:waypoint x="1480" y="333"/>
+        <di:waypoint x="1494" y="333"/>
+        <di:waypoint x="1494" y="131"/>
+        <di:waypoint x="1510" y="131"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
