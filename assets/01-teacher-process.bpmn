@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_02_teacher_process" targetNamespace="https://example.org/lab3/bpmn">
+  <process id="Process_02_teacher_process" name="BPMN 2.0 - Работа преподавателя" isExecutable="false">
+    <laneSet id="LaneSet_02_teacher_process">
+      <lane id="Lane_learner" name="Преподаватель">
+        <flowNodeRef>Node_start</flowNodeRef>
+        <flowNodeRef>Node_login</flowNodeRef>
+        <flowNodeRef>Node_manage</flowNodeRef>
+        <flowNodeRef>Node_show</flowNodeRef>
+        <flowNodeRef>Node_done2</flowNodeRef>
+      </lane>
+      <lane id="Lane_platform" name="Образовательная платформа">
+        <flowNodeRef>Node_auth</flowNodeRef>
+        <flowNodeRef>Node_allowed</flowNodeRef>
+        <flowNodeRef>Node_deny</flowNodeRef>
+        <flowNodeRef>Node_denied</flowNodeRef>
+        <flowNodeRef>Node_action</flowNodeRef>
+        <flowNodeRef>Node_validate</flowNodeRef>
+        <flowNodeRef>Node_commit</flowNodeRef>
+        <flowNodeRef>Node_done</flowNodeRef>
+        <flowNodeRef>Node_results</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="Node_start" name="Начало">
+      <outgoing>Flow_0</outgoing>
+    </startEvent>
+    <userTask id="Node_login" name="Войти в аккаунт">
+      <incoming>Flow_0</incoming>
+      <outgoing>Flow_1</outgoing>
+    </userTask>
+    <serviceTask id="Node_auth" name="Проверить аккаунт и роль">
+      <incoming>Flow_1</incoming>
+      <outgoing>Flow_2</outgoing>
+    </serviceTask>
+    <exclusiveGateway id="Node_allowed" name="Доступ разрешён?">
+      <incoming>Flow_2</incoming>
+      <outgoing>Flow_3</outgoing>
+      <outgoing>Flow_5</outgoing>
+    </exclusiveGateway>
+    <serviceTask id="Node_deny" name="Отказать в доступе">
+      <incoming>Flow_3</incoming>
+      <outgoing>Flow_4</outgoing>
+    </serviceTask>
+    <endEvent id="Node_denied" name="Отказ">
+      <incoming>Flow_4</incoming>
+    </endEvent>
+    <exclusiveGateway id="Node_action" name="Выбор операции">
+      <incoming>Flow_5</incoming>
+      <outgoing>Flow_6</outgoing>
+      <outgoing>Flow_10</outgoing>
+    </exclusiveGateway>
+    <userTask id="Node_manage" name="Создать / изменить / удалить курс, материалы, задания">
+      <incoming>Flow_6</incoming>
+      <outgoing>Flow_7</outgoing>
+    </userTask>
+    <serviceTask id="Node_validate" name="Проверить владение, данные и зависимости">
+      <incoming>Flow_7</incoming>
+      <outgoing>Flow_8</outgoing>
+    </serviceTask>
+    <serviceTask id="Node_commit" name="Сохранить изменения / удалить безопасно">
+      <incoming>Flow_8</incoming>
+      <outgoing>Flow_9</outgoing>
+    </serviceTask>
+    <endEvent id="Node_done" name="Конец">
+      <incoming>Flow_9</incoming>
+    </endEvent>
+    <serviceTask id="Node_results" name="Проверить право на курс и получить прогресс">
+      <incoming>Flow_10</incoming>
+      <outgoing>Flow_11</outgoing>
+    </serviceTask>
+    <userTask id="Node_show" name="Просмотреть результаты">
+      <incoming>Flow_11</incoming>
+      <outgoing>Flow_12</outgoing>
+    </userTask>
+    <endEvent id="Node_done2" name="Конец">
+      <incoming>Flow_12</incoming>
+    </endEvent>
+    <sequenceFlow id="Flow_0" sourceRef="Node_start" targetRef="Node_login"/>
+    <sequenceFlow id="Flow_1" sourceRef="Node_login" targetRef="Node_auth"/>
+    <sequenceFlow id="Flow_2" sourceRef="Node_auth" targetRef="Node_allowed"/>
+    <sequenceFlow id="Flow_3" sourceRef="Node_allowed" targetRef="Node_deny" name="Нет"/>
+    <sequenceFlow id="Flow_4" sourceRef="Node_deny" targetRef="Node_denied"/>
+    <sequenceFlow id="Flow_5" sourceRef="Node_allowed" targetRef="Node_action" name="Да"/>
+    <sequenceFlow id="Flow_6" sourceRef="Node_action" targetRef="Node_manage" name="Контент"/>
+    <sequenceFlow id="Flow_7" sourceRef="Node_manage" targetRef="Node_validate"/>
+    <sequenceFlow id="Flow_8" sourceRef="Node_validate" targetRef="Node_commit"/>
+    <sequenceFlow id="Flow_9" sourceRef="Node_commit" targetRef="Node_done"/>
+    <sequenceFlow id="Flow_10" sourceRef="Node_action" targetRef="Node_results" name="Прогресс"/>
+    <sequenceFlow id="Flow_11" sourceRef="Node_results" targetRef="Node_show"/>
+    <sequenceFlow id="Flow_12" sourceRef="Node_show" targetRef="Node_done2"/>
+  </process>
+  <bpmndi:BPMNDiagram id="Diagram_02-teacher-process">
+    <bpmndi:BPMNPlane id="Plane_02-teacher-process" bpmnElement="Process_02_teacher_process">
+      <bpmndi:BPMNShape id="Shape_Lane_learner" bpmnElement="Lane_learner" isHorizontal="true">
+        <dc:Bounds x="24" y="75" width="2152" height="115"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_platform" bpmnElement="Lane_platform" isHorizontal="true">
+        <dc:Bounds x="24" y="190" width="2152" height="540"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_start" bpmnElement="Node_start">
+        <dc:Bounds x="105" y="113" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_login" bpmnElement="Node_login">
+        <dc:Bounds x="195" y="100" width="175" height="62"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_auth" bpmnElement="Node_auth">
+        <dc:Bounds x="435" y="265" width="200" height="66"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_allowed" bpmnElement="Node_allowed">
+        <dc:Bounds x="680" y="269" width="62" height="62"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_deny" bpmnElement="Node_deny">
+        <dc:Bounds x="800" y="590" width="165" height="66"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_denied" bpmnElement="Node_denied">
+        <dc:Bounds x="1012" y="603" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_action" bpmnElement="Node_action">
+        <dc:Bounds x="810" y="269" width="62" height="62"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_manage" bpmnElement="Node_manage">
+        <dc:Bounds x="935" y="94" width="300" height="70"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_validate" bpmnElement="Node_validate">
+        <dc:Bounds x="1280" y="265" width="255" height="66"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_commit" bpmnElement="Node_commit">
+        <dc:Bounds x="1575" y="265" width="250" height="66"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_done" bpmnElement="Node_done">
+        <dc:Bounds x="1890" y="280" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_results" bpmnElement="Node_results">
+        <dc:Bounds x="1080" y="445" width="265" height="70"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_show" bpmnElement="Node_show">
+        <dc:Bounds x="1440" y="94" width="230" height="70"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_done2" bpmnElement="Node_done2">
+        <dc:Bounds x="1750" y="111" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_0" bpmnElement="Flow_0">
+        <di:waypoint x="141" y="131.0"/>
+        <di:waypoint x="195" y="131.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_1" bpmnElement="Flow_1">
+        <di:waypoint x="370" y="131"/>
+        <di:waypoint x="400" y="131"/>
+        <di:waypoint x="400" y="298"/>
+        <di:waypoint x="435" y="298"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_2" bpmnElement="Flow_2">
+        <di:waypoint x="635" y="298.0"/>
+        <di:waypoint x="680" y="300.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_3" bpmnElement="Flow_3">
+        <di:waypoint x="711" y="331"/>
+        <di:waypoint x="711" y="623"/>
+        <di:waypoint x="800" y="623"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_4" bpmnElement="Flow_4">
+        <di:waypoint x="965" y="623.0"/>
+        <di:waypoint x="1012" y="621.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_5" bpmnElement="Flow_5">
+        <di:waypoint x="742" y="300.0"/>
+        <di:waypoint x="810" y="300.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_6" bpmnElement="Flow_6">
+        <di:waypoint x="841" y="269"/>
+        <di:waypoint x="841" y="131"/>
+        <di:waypoint x="935" y="131"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_7" bpmnElement="Flow_7">
+        <di:waypoint x="1235" y="129"/>
+        <di:waypoint x="1250" y="129"/>
+        <di:waypoint x="1250" y="298"/>
+        <di:waypoint x="1280" y="298"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_8" bpmnElement="Flow_8">
+        <di:waypoint x="1535" y="298.0"/>
+        <di:waypoint x="1575" y="298.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_9" bpmnElement="Flow_9">
+        <di:waypoint x="1825" y="298.0"/>
+        <di:waypoint x="1890" y="298.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_10" bpmnElement="Flow_10">
+        <di:waypoint x="841" y="331"/>
+        <di:waypoint x="841" y="480"/>
+        <di:waypoint x="1080" y="480"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_11" bpmnElement="Flow_11">
+        <di:waypoint x="1345" y="480"/>
+        <di:waypoint x="1385" y="480"/>
+        <di:waypoint x="1385" y="129"/>
+        <di:waypoint x="1440" y="129"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_12" bpmnElement="Flow_12">
+        <di:waypoint x="1670" y="129.0"/>
+        <di:waypoint x="1750" y="129.0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

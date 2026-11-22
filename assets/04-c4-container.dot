@@ -1,0 +1,36 @@
+digraph C4 {
+	graph [bgcolor=white fontname="DejaVu Sans" fontsize=19 label="C4 - Уровень 2 - контейнерная архитектура" labelloc=t nodesep=.55 pad=.3 rankdir=LR ranksep=1.15 splines=spline]
+	node [color="#4e7495" fillcolor="#eaf4fc" fontname="DejaVu Sans" fontsize=12 margin="0.23,0.17" penwidth=2 shape=box style="rounded,filled"]
+	edge [arrowsize=.8 color="#50718a" fontname="DejaVu Sans" fontsize=11]
+	Student [label="Учащийся
+[Пользователь]"]
+	Teacher [label="Преподаватель
+[Пользователь]"]
+	subgraph cluster_platform {
+		bgcolor="#f3f7fc" color="#80a1c0" fontname="DejaVu Sans" fontsize=17 label="Образовательная платформа" penwidth=2 style=rounded
+		Client [label="Веб-клиент
+[Browser]
+Интерфейс обучения"]
+		Api [label="Основной API
+[Java / Spring Boot]
+Учебная логика, права, фильтр тем" fillcolor="#d8ecfa"]
+		DB [label="Учебная БД
+[PostgreSQL]
+Контент, попытки, прогресс" fillcolor="#e2f2e7"]
+		ML [label="Рекомендательный сервис
+[Python / FastAPI]
+Ранжирование и объяснения" fillcolor="#fef0d7"]
+		Pipeline [label="ML-пайплайн
+[Python]
+Псевдонимизация, обучение, версии" fillcolor="#fef0d7"]
+	}
+	Student -> Client [label="Изучает / решает"]
+	Teacher -> Client [label="Управляет курсом"]
+	Client -> Api [label="HTTPS / REST"]
+	Api -> DB [label="SQL / TLS"]
+	Api -> ML [label="Внутренний HTTP API
+признаки без прямых ID"]
+	Pipeline -> DB [label="Ограниченный SQL
+и метаданные" dir=both]
+	Pipeline -> ML [label="Проверенный артефакт модели"]
+}

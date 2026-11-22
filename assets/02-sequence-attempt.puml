@@ -1,0 +1,35 @@
+@startuml
+actor "Учащийся" as Student
+participant "Веб-клиент" as UI
+participant "Spring Boot API" as API
+database "PostgreSQL" as DB
+participant "ML-сервис" as ML
+Student -> UI: Отправить ответ
+UI -> API: POST /attempts (токен доступа)
+API -> API: Проверить авторизацию, роль, доступ и формат
+alt Недопустимый запрос
+ API --> UI: 401 / 403 / 400
+ UI --> Student: Сообщение об ошибке
+else Запрос допустим
+ API -> DB: Получить профиль и историю ДО ответа
+ DB --> API: История и профиль
+ API -> API: Проверить правильность ответа
+ API -> DB: Транзакция: попытка, событие, прогресс
+ DB --> API: COMMIT
+ API -> DB: Получить разрешённых по пререквизитам кандидатов
+ DB --> API: Кандидаты
+ alt Достаточная предыдущая история
+  API -> ML: POST /v1/recommendations
+  alt ML доступен
+   ML --> API: Ранжирование, причины, версия
+  else Сбой или таймаут
+   API -> API: Базовое ранжирование
+  end
+ else Холодный старт
+  API -> API: Базовое ранжирование
+ end
+ API -> API: Валидация выбора и объяснения
+ API --> UI: Оценка, прогресс, рекомендации
+ UI --> Student: Результат и следующий шаг
+end
+@enduml
